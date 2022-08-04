@@ -1,4 +1,4 @@
-# mobile_crm_app
+# Flutter Basics Training Repo
 
 This repository is meant to be used a training material to introduce folks to Flutter programming. 
 
