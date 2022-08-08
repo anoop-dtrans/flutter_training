@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print
 
+import 'package:api_using_model/models/user_post.dart';
+import 'package:api_using_model/pages/user_details.dart';
 import 'package:api_using_model/services/api_service.dart';
 import 'package:api_using_model/models/user.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +54,16 @@ class UsersStatelessPage extends StatelessWidget {
           return ListTile(
             title: Text(post.name),
             subtitle: Text(post.website ?? ''),
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx1) => UserDetails(index: post.id)));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => UserDetails(index),
+              //     ),
+              //   );
+            },
           );
         },
       ),

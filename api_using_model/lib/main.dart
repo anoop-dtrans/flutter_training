@@ -1,4 +1,4 @@
-import 'package:api_using_model/pages/users_page.dart';
+import 'package:api_using_model/pages/user_sl_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const UsersPage(title: 'Users'),
+      home: const UsersStatelessPage(title: 'Users'),
     );
   }
 }
