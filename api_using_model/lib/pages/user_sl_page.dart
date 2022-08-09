@@ -18,7 +18,7 @@ class UsersStatelessPage extends StatelessWidget {
         title: const Text('Posts'),
       ),
       body: FutureBuilder<List<User>>(
-        future: ApiService().getPosts(),
+        future: ApiService().getUsers(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
@@ -44,25 +44,22 @@ class UsersStatelessPage extends StatelessWidget {
     );
   }
 
-  Widget _userListView(BuildContext context, List<User> posts) {
+  Widget _userListView(BuildContext context, List<User> users) {
     return Container(
       color: Colors.white,
       child: ListView.builder(
-        itemCount: posts.length,
+        itemCount: users.length,
         itemBuilder: (context, index) {
-          User post = posts[index];
+          User user = users[index];
           return ListTile(
-            title: Text(post.name),
-            subtitle: Text(post.website ?? ''),
+            title: Text(user.name),
+            subtitle: Text(user.website ?? ''),
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx1) => UserDetails(index: post.id)));
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => UserDetails(index),
-              //     ),
-              //   );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => UserDetails(userId: user.id),
+                ),
+              );
             },
           );
         },

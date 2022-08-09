@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:api_using_model/pages/user_details.dart';
 import 'package:api_using_model/services/api_service.dart';
 import 'package:api_using_model/models/user.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersPageState extends State<UsersPage> {
-  List<User> posts = [];
+  List<User> users = [];
   bool loading = false;
 
   @override
@@ -31,9 +32,9 @@ class _UsersPageState extends State<UsersPage> {
       setState(() {
         loading = true;
       });
-      final list = await ApiService().getPosts();
+      final list = await ApiService().getUsers();
       setState(() {
-        posts = list;
+        users = list;
         loading = false;
       });
     } catch (e) {
@@ -52,14 +53,22 @@ class _UsersPageState extends State<UsersPage> {
         child: Container(
           color: Colors.white,
           child: ListView.builder(
-              itemCount: posts.length,
-              itemBuilder: (context, index) {
-                User post = posts[index];
-                return ListTile(
-                  title: Text(post.name),
-                  subtitle: Text(post.website ?? ''),
-                );
-              }),
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              User user = users[index];
+              return ListTile(
+                title: Text(user.name),
+                subtitle: Text(user.website ?? ''),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => UserDetails(userId: user.id),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

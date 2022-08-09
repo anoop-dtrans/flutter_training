@@ -8,35 +8,49 @@ import 'package:path/path.dart' as path;
 import '../models/user.dart';
 
 class ApiService {
-  ApiService({String? baseUrl, String? baseUrl1})
-      : baseUrl = baseUrl ?? Constants.baseUrl,
-        baseUrl1 = baseUrl ?? Constants.baseUrl1;
+  ApiService({String? baseUrl}) : baseUrl = baseUrl ?? Constants.baseUrl;
 
   final String baseUrl;
-  final String baseUrl1;
-  Future<List<User>> getPosts() async {
-    try {
-      final uri = Uri.parse(path.join(baseUrl, 'users'));
-      final response = await http.get(uri);
-      if (response.statusCode == 200) {
-        return postFromJson(response.body);
-      } else {
-        return [];
-      }
-    } catch (e) {
+
+  /// Get Users
+  Future<List<User>> getUsers() async {
+    final response = await _getData('users');
+    if (response.statusCode == 200) {
+      return postFromJson(response.body);
+    } else {
       return [];
     }
   }
 
-  Future<UserPost> getUserPosts(index) async {
+  /// Get User Posts
+  Future<List<UserPost>> getUserPosts(int userId) async {
+    final response = await _getData('users/$userId/posts');
+    if (response.statusCode == 200) {
+      final list = jsonDecode(response.body) as List;
+      return list.map((e) => UserPost.fromJson(e)).toList();
+    } else {
+      return [];
+    }
+  }
+
+  /// Get Post Details
+  Future<UserPost?> getPostDetails(int postId) async {
+    final response = await _getData('posts/$postId');
+    if (response.statusCode == 200) {
+      return UserPost.fromJson(jsonDecode(response.body));
+    } else {
+      return null;
+    }
+  }
+
+  Future<http.Response> _getData(
+    String urlPath, {
+    Map<String, String>? queryParams,
+  }) async {
     try {
-      final uri = Uri.parse(path.join(baseUrl1, '$index'));
+      final uri = Uri.parse(path.join(baseUrl, urlPath));
       final response = await http.get(uri);
-      if (response.statusCode == 200) {
-        return UserPost.fromJson(jsonDecode(response.body));
-      } else {
-        throw Exception('Failed to load data');
-      }
+      return response;
     } catch (e) {
       throw Exception('Failed to load data');
     }

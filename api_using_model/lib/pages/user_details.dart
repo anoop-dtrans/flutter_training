@@ -1,13 +1,11 @@
 import 'package:api_using_model/models/user_post.dart';
 import 'package:api_using_model/services/api_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class UserDetails extends StatelessWidget {
-  const UserDetails({Key? key, required this.index}) : super(key: key);
+  const UserDetails({Key? key, required this.userId}) : super(key: key);
 
-  final int index;
+  final int userId;
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +13,8 @@ class UserDetails extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Details'),
         ),
-        body: FutureBuilder<UserPost>(
-          future: ApiService().getUserPosts(index),
+        body: FutureBuilder<UserPost?>(
+          future: ApiService().getPostDetails(userId),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Padding(
