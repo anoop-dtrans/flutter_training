@@ -1,9 +1,7 @@
 // ignore_for_file: avoid_print
 
-import 'package:api_using_model/models/user_post.dart';
 import 'package:api_using_model/pages/user_details.dart';
 import 'package:api_using_model/provider/provider_demo.dart';
-import 'package:api_using_model/services/api_service.dart';
 import 'package:api_using_model/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,9 +19,9 @@ class UsersStatelessPage extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  final model =
-                      Provider.of<ProviderDemo>(context, listen: false);
-                  print(model.users);
+                  final model = context.select((ProviderDemo p) => p.users);
+                  // Provider.of<ProviderDemo>(context, listen: false);
+                  //print(model.users);
                 },
                 icon: const Icon(Icons.add))
           ],
@@ -34,17 +32,18 @@ class UsersStatelessPage extends StatelessWidget {
           },
           child: Builder(
             builder: (context) {
-              final model = Provider.of<ProviderDemo>(context);
-              final users = model.users;
-
+              final model = context.watch<ProviderDemo>();
+              // final model = context.watch<ProviderDemo>();
+              //context.read<ProviderDemo>().users
+              //context.read<Counter>();
               switch (model.homeState) {
-                case HomeState.Loading:
+                case HomeState.loading:
                   return _loadingWidget(context);
-                case HomeState.Error:
+                case HomeState.error:
                   return _emptyUserWidget(context);
-                case HomeState.Loaded:
-                  return _userListView(context, users);
-                case HomeState.Initial:
+                case HomeState.loaded:
+                  return _userListView(context, model.users);
+                case HomeState.initial:
                   return _loadingWidget(context);
               }
             },

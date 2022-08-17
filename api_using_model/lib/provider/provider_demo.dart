@@ -3,30 +3,30 @@ import 'package:api_using_model/services/api_service.dart';
 import 'package:flutter/material.dart';
 
 enum HomeState {
-  Initial,
-  Loading,
-  Loaded,
-  Error,
+  initial,
+  loading,
+  loaded,
+  error,
 }
 
 class ProviderDemo with ChangeNotifier {
-  HomeState _homeState = HomeState.Initial;
+  HomeState homeState = HomeState.initial;
   List<User> users = [];
 
   ProviderDemo() {
     _fetchUsers();
   }
 
-  HomeState get homeState => _homeState;
+  //HomeState get homeState => homeState;
   Future<void> _fetchUsers() async {
-    _homeState = HomeState.Loading;
+    homeState = HomeState.loading;
     try {
-      await Future.delayed(const Duration(seconds: 5));
-      final apiusers = await ApiService().getUsers();
-      users = apiusers;
-      _homeState = HomeState.Loaded;
+      //await Future.delayed(const Duration(seconds: 5));
+      final apiUsers = await ApiService().getUsers();
+      users = apiUsers;
+      homeState = HomeState.loaded;
     } catch (e) {
-      _homeState = HomeState.Error;
+      homeState = HomeState.error;
     }
     notifyListeners();
   }
