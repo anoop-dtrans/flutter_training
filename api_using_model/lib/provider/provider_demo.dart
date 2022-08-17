@@ -14,16 +14,17 @@ class ProviderDemo with ChangeNotifier {
   List<User> users = [];
 
   ProviderDemo() {
-    _fetchUsers();
+    fetchUsers();
   }
 
   HomeState get homeState => _homeState;
-  Future<void> _fetchUsers() async {
+
+  Future<void> fetchUsers() async {
     _homeState = HomeState.Loading;
     try {
       await Future.delayed(const Duration(seconds: 5));
-      final apiusers = await ApiService().getUsers();
-      users = apiusers;
+      final apiUsers = await ApiService().getUsers();
+      users = apiUsers;
       _homeState = HomeState.Loaded;
     } catch (e) {
       _homeState = HomeState.Error;

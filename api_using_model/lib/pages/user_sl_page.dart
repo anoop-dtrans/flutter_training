@@ -1,10 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:api_using_model/models/user_post.dart';
+import 'package:api_using_model/models/user.dart';
 import 'package:api_using_model/pages/user_details.dart';
 import 'package:api_using_model/provider/provider_demo.dart';
-import 'package:api_using_model/services/api_service.dart';
-import 'package:api_using_model/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,41 +13,47 @@ class UsersStatelessPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Posts'),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  final model =
-                      Provider.of<ProviderDemo>(context, listen: false);
-                  print(model.users);
-                },
-                icon: const Icon(Icons.add))
-          ],
-        ),
-        body: ChangeNotifierProvider(
-          create: (context) {
-            return ProviderDemo();
-          },
-          child: Builder(
-            builder: (context) {
-              final model = Provider.of<ProviderDemo>(context);
-              final users = model.users;
+    return ChangeNotifierProvider(
+      create: (context) {
+        return ProviderDemo();
+      },
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Posts'),
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    final model = context.read<ProviderDemo>();
+                    model.fetchUsers();
+                    print(model.users);
+                  },
+                  icon: const Icon(Icons.refresh),
+                )
+              ],
+            ),
+            body: _body(context),
+          );
+        },
+      ),
+    );
+  }
 
-              switch (model.homeState) {
-                case HomeState.Loading:
-                  return _loadingWidget(context);
-                case HomeState.Error:
-                  return _emptyUserWidget(context);
-                case HomeState.Loaded:
-                  return _userListView(context, users);
-                case HomeState.Initial:
-                  return _loadingWidget(context);
-              }
-            },
-          ),
-        ));
+  Widget _body(BuildContext context) {
+    final model = context.watch<ProviderDemo>();
+    final users = model.users;
+
+    switch (model.homeState) {
+      case HomeState.Loading:
+        return _loadingWidget(context);
+      case HomeState.Error:
+        return _emptyUserWidget(context);
+      case HomeState.Loaded:
+        return _userListView(context, users);
+      case HomeState.Initial:
+        return _loadingWidget(context);
+    }
   }
 
   Widget _loadingWidget(BuildContext context) {
