@@ -10,24 +10,24 @@ enum HomeState {
 }
 
 class ProviderDemo with ChangeNotifier {
-  HomeState homeState = HomeState.initial;
+  HomeState _homeState = HomeState.initial;
   List<User> users = [];
 
   ProviderDemo() {
     fetchUsers();
   }
 
-  HomeState get homeState => homeState;
+  HomeState get homeState => _homeState;
 
   Future<void> fetchUsers() async {
-    _homeState = HomeState.Loading;
+    _homeState = HomeState.loading;
     try {
       //await Future.delayed(const Duration(seconds: 5));
       final apiUsers = await ApiService().getUsers();
       users = apiUsers;
-      homeState = HomeState.loaded;
+      _homeState = HomeState.loaded;
     } catch (e) {
-      homeState = HomeState.error;
+      _homeState = HomeState.error;
     }
     notifyListeners();
   }

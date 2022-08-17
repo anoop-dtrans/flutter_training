@@ -45,13 +45,13 @@ class UsersStatelessPage extends StatelessWidget {
     final users = model.users;
 
     switch (model.homeState) {
-      case HomeState.Loading:
+      case HomeState.loading:
         return _loadingWidget(context);
-      case HomeState.Error:
+      case HomeState.error:
         return _emptyUserWidget(context);
-      case HomeState.Loaded:
+      case HomeState.loaded:
         return _userListView(context, users);
-      case HomeState.Initial:
+      case HomeState.initial:
         return _loadingWidget(context);
     }
   }
