@@ -10,8 +10,8 @@ String postToJson(List<User> data) =>
 
 class User {
   User({
-    required this.id,
-    required this.name,
+    this.id = 0,
+    this.name = '',
     this.website,
   });
 
@@ -30,4 +30,6 @@ class User {
         "name": name,
         "website": website,
       };
+
+  bool get isEmpty => id == 0;
 }

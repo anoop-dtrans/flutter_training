@@ -22,6 +22,16 @@ class ApiService {
     }
   }
 
+  // Future<User> getUserPosts(int userId) async {
+  //   final response = await _getData('users/$userId/posts');
+  //   if (response.statusCode == 200) {
+  //     final list = jsonDecode(response.body) as List;
+  //     return list.map((e) => UserPost.fromJson(e)).toList();
+  //   } else {
+  //     return [];
+  //   }
+  // }
+
   /// Get User Posts
   Future<List<UserPost>> getUserPosts(int userId) async {
     final response = await _getData('users/$userId/posts');
