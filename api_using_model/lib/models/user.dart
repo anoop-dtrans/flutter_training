@@ -13,22 +13,26 @@ class User {
     this.id = 0,
     this.name = '',
     this.website,
+    this.email,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         name: json["name"],
         website: json["website"],
+        email: json["email"],
       );
 
   final int id;
   final String name;
   final String? website;
+  final String? email;
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "website": website,
+        "email": email,
       };
 
   bool get isEmpty => id == 0;
