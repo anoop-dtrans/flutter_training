@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:api_using_model/common/constants.dart';
 import 'package:api_using_model/models/user_post.dart';
+import 'package:api_using_model/models/users.dart';
+import 'package:api_using_model/models/users_postdetails.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 
@@ -33,11 +35,10 @@ class ApiService {
   // }
 
   /// Get User Posts
-  Future<List<UserPost>> getUserPosts(int userId) async {
+  Future<List<UsersPost>> getUserPosts(int userId) async {
     final response = await _getData('users/$userId/posts');
     if (response.statusCode == 200) {
-      final list = jsonDecode(response.body) as List;
-      return list.map((e) => UserPost.fromJson(e)).toList();
+      return usersPostFromJson(response.body);
     } else {
       return [];
     }
@@ -50,6 +51,29 @@ class ApiService {
       return UserPost.fromJson(jsonDecode(response.body));
     } else {
       return null;
+    }
+  }
+
+  /// Get User Details
+  // Future<Users?> getUserDetails(int postId) async {
+  //   final response = await _getData('users/$postId');
+  //   if (response.statusCode == 200) {
+  //     return Users.fromJson(jsonDecode(response.body));
+  //   } else {
+  //     return null;
+  //   }
+  // }
+  Future<Users> getUserDetails(userId) async {
+    try {
+      final uri = await _getData('users/$userId');
+      //final response = await http.get(uri);
+      if (uri.statusCode == 200) {
+        return Users.fromJson(jsonDecode(uri.body));
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      throw Exception('Failed to load data');
     }
   }
 

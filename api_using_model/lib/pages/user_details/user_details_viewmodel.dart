@@ -1,11 +1,14 @@
 import 'package:api_using_model/models/user.dart';
 import 'package:api_using_model/models/user_post.dart';
+import 'package:api_using_model/models/users_postdetails.dart';
 import 'package:api_using_model/services/api_service.dart';
 import 'package:flutter/material.dart';
 
 class UserDetailsViewModel extends ChangeNotifier {
   /// Default Constructor
-  UserDetailsViewModel(this.userId);
+  UserDetailsViewModel(this.userId) {
+    getUserPosts(userId);
+  }
 
   /// Required to get started
   final int userId;
@@ -14,13 +17,19 @@ class UserDetailsViewModel extends ChangeNotifier {
   User? _user;
   User get user => _user ?? User();
 
-  List<UserPost>? _posts;
-  List<UserPost> get posts => _posts ?? [];
+  List<UsersPost>? _posts;
+  List<UsersPost> get posts => _posts ?? [];
 
   /// Get User Posts
-  Future<void> getUserPosts() async {
+  Future<void> getUserPosts(userId) async {
     try {
-      final posts = await ApiService().getUserPosts(userId);
-    } catch (e) {}
+      //await Future.delayed(const Duration(seconds: 5));
+      final apiUsers = await ApiService().getUserPosts(userId);
+      _posts = apiUsers;
+    } catch (e) {
+      //_homeState = HomeStatePost.error;
+    }
+    notifyListeners();
   }
+  
 }
