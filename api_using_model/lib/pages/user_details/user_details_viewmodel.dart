@@ -1,13 +1,13 @@
 import 'package:api_using_model/models/user.dart';
-import 'package:api_using_model/models/user_post.dart';
-import 'package:api_using_model/models/users_postdetails.dart';
+import 'package:api_using_model/models/users_post_details.dart';
 import 'package:api_using_model/services/api_service.dart';
 import 'package:flutter/material.dart';
 
 class UserDetailsViewModel extends ChangeNotifier {
   /// Default Constructor
   UserDetailsViewModel(this.userId) {
-    getUserPosts(userId);
+    getUserDetails();
+    getUserPosts();
   }
 
   /// Required to get started
@@ -20,16 +20,28 @@ class UserDetailsViewModel extends ChangeNotifier {
   List<UsersPost>? _posts;
   List<UsersPost> get posts => _posts ?? [];
 
-  /// Get User Posts
-  Future<void> getUserPosts(userId) async {
+  String? errorMessage;
+
+  Future<void> getUserDetails() async {
     try {
-      //await Future.delayed(const Duration(seconds: 5));
+      final user = await ApiService().getUserDetails(userId);
+      _user = user;
+    } catch (e) {
+      errorMessage = 'Unable to fetch the user details';
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  /// Get User Posts
+  Future<void> getUserPosts() async {
+    try {
       final apiUsers = await ApiService().getUserPosts(userId);
       _posts = apiUsers;
     } catch (e) {
-      //_homeState = HomeStatePost.error;
+      errorMessage = 'Unable to fetch the user details';
+    } finally {
+      notifyListeners();
     }
-    notifyListeners();
   }
-  
 }

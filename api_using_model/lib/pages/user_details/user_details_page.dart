@@ -1,9 +1,6 @@
 import 'package:api_using_model/models/user.dart';
-import 'package:api_using_model/models/user_post.dart';
-import 'package:api_using_model/models/users.dart';
-import 'package:api_using_model/models/users_postdetails.dart';
+import 'package:api_using_model/models/users_post_details.dart';
 import 'package:api_using_model/pages/user_details/user_details_viewmodel.dart';
-import 'package:api_using_model/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,26 +20,22 @@ class UserDetailsPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => UserDetailsViewModel(userId),
       builder: (context, child) {
-        final usersposts = context
-            .select<UserDetailsViewModel, List<UsersPost>>((vm) => vm.posts);
-        //final usersposts = model.posts;
         return Scaffold(
           appBar: AppBar(
             title: const Text('Details'),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  context.read<UserDetailsViewModel>().getUserPosts();
+                },
+                icon: const Icon(Icons.refresh),
+              )
+            ],
           ),
           body: Column(
             children: [
               _userDetailsWidget(context),
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                IconButton(
-                  onPressed: () {
-                    final model = context.read<UserDetailsViewModel>();
-                    print(model.posts);
-                  },
-                  icon: const Icon(Icons.refresh),
-                )
-              ]),
-              _userPostsWidget(context, usersposts),
+              Expanded(child: _userPostsWidget(context)),
             ],
           ),
         );
@@ -50,49 +43,45 @@ class UserDetailsPage extends StatelessWidget {
     );
   }
 
-  _userDetailsWidget(BuildContext context) {
-    return FutureBuilder<Users>(
-      future: ApiService().getUserDetails(userId),
-      builder: (context, snapshot) {
-        print('hi first');
-        if (snapshot.hasData) {
-          return Padding(
-            padding: const EdgeInsets.all(30),
+  Widget _userDetailsWidget(BuildContext context) {
+    final user = context.select<UserDetailsViewModel, User>((vm) => vm.user);
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        children: [
+          Container(
+            color: Colors.grey,
+            width: 80,
+            height: 80,
+          ),
+          const SizedBox(width: 16),
+          Expanded(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Name:${snapshot.data?.email}'),
-                const SizedBox(
-                  height: 20,
-                ),
-                Text('Phone:${snapshot.data?.phone}')
+                Text(user.name),
+                const SizedBox(height: 20),
+                Text(user.email ?? '')
               ],
             ),
-          );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-        return const CircularProgressIndicator();
-      },
+          ),
+        ],
+      ),
     );
   }
 
-  _userPostsWidget(BuildContext context, List<UsersPost> usersposts) {
-    //final userPosts = context.watch<UserDetailsViewModel>().posts;
-    // final userPosts =
-    //     context.select<UserDetailsViewModel, List<UsersPost>>((vm) => vm.posts);
-    print('hi second');
-    return Expanded(
-      child: ListView.builder(
-        itemCount: usersposts.length,
-        itemBuilder: (context, index) {
-          UsersPost userspost1 = usersposts[index];
-          return ListTile(
-            title: Text(userspost1.title ?? ''),
-            subtitle: Text(userspost1.body ?? ''),
-          );
-        },
-      ),
+  Widget _userPostsWidget(BuildContext context) {
+    final usersPosts =
+        context.select<UserDetailsViewModel, List<UsersPost>>((vm) => vm.posts);
+    return ListView.builder(
+      itemCount: usersPosts.length,
+      itemBuilder: (context, index) {
+        UsersPost post = usersPosts[index];
+        return ListTile(
+          title: Text(post.title ?? ''),
+          subtitle: Text(post.body ?? ''),
+        );
+      },
     );
   }
 }

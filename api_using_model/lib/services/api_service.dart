@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:api_using_model/common/constants.dart';
 import 'package:api_using_model/models/user_post.dart';
 import 'package:api_using_model/models/users.dart';
-import 'package:api_using_model/models/users_postdetails.dart';
+import 'package:api_using_model/models/users_post_details.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 
@@ -63,12 +63,11 @@ class ApiService {
   //     return null;
   //   }
   // }
-  Future<Users> getUserDetails(userId) async {
+  Future<User> getUserDetails(userId) async {
     try {
-      final uri = await _getData('users/$userId');
-      //final response = await http.get(uri);
-      if (uri.statusCode == 200) {
-        return Users.fromJson(jsonDecode(uri.body));
+      final response = await _getData('users/$userId');
+      if (response.statusCode == 200) {
+        return User.fromJson(jsonDecode(response.body));
       } else {
         throw Exception('Failed to load data');
       }
