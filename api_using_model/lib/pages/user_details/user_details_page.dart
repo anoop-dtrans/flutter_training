@@ -18,7 +18,7 @@ class UserDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => UserDetailsViewModel(userId),
+      create: (context) => UserDetailsViewModel(userId)..initialize(),
       builder: (context, child) {
         return Scaffold(
           appBar: AppBar(
@@ -71,6 +71,33 @@ class UserDetailsPage extends StatelessWidget {
   }
 
   Widget _userPostsWidget(BuildContext context) {
+    // Method 1:
+    // return Builder(builder: (context) {
+    //   final usersPosts = context
+    //       .select<UserDetailsViewModel, List<UsersPost>>((vm) => vm.posts);
+    //   return ListView.builder(
+    //     itemCount: usersPosts.length,
+    //     itemBuilder: (context, index) {
+    //       UsersPost post = usersPosts[index];
+    //       return ListTile(
+    //         title: Text(post.title ?? ''),
+    //         subtitle: Text(post.body ?? ''),
+    //       );
+    //     },
+    //   );
+    // });
+
+    return const UserPostListViewWidget();
+  }
+}
+
+class UserPostListViewWidget extends StatelessWidget {
+  const UserPostListViewWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     final usersPosts =
         context.select<UserDetailsViewModel, List<UsersPost>>((vm) => vm.posts);
     return ListView.builder(

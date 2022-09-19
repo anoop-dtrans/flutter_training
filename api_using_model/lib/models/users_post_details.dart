@@ -1,6 +1,4 @@
-// To parse this JSON data, do
-//
-//     final usersPost = usersPostFromJson(jsonString);
+import 'package:equatable/equatable.dart';
 
 import 'dart:convert';
 
@@ -10,16 +8,16 @@ List<UsersPost> usersPostFromJson(String str) =>
 String usersPostToJson(List<UsersPost> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class UsersPost {
-  UsersPost({
+class UsersPost extends Equatable {
+  const UsersPost({
     required this.userId,
     this.title,
     this.body,
   });
 
-  int userId;
-  String? title;
-  String? body;
+  final int userId;
+  final String? title;
+  final String? body;
 
   factory UsersPost.fromJson(Map<String, dynamic> json) => UsersPost(
         userId: json["userId"],
@@ -32,4 +30,7 @@ class UsersPost {
         "title": title,
         "body": body,
       };
+
+  @override
+  List<Object?> get props => [userId, title];
 }

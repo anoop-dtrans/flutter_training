@@ -9,11 +9,11 @@ enum HomeState {
   error,
 }
 
-class ProviderDemo with ChangeNotifier {
+class UserChangeNotifier with ChangeNotifier {
   HomeState _homeState = HomeState.initial;
   List<User> users = [];
 
-  ProviderDemo() {
+  UserChangeNotifier() {
     fetchUsers();
   }
 
@@ -22,13 +22,13 @@ class ProviderDemo with ChangeNotifier {
   Future<void> fetchUsers() async {
     _homeState = HomeState.loading;
     try {
-      //await Future.delayed(const Duration(seconds: 5));
       final apiUsers = await ApiService().getUsers();
       users = apiUsers;
       _homeState = HomeState.loaded;
     } catch (e) {
       _homeState = HomeState.error;
+    } finally {
+      notifyListeners();
     }
-    notifyListeners();
   }
 }

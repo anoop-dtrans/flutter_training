@@ -15,7 +15,7 @@ class UsersStatelessPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) {
-        return ProviderDemo();
+        return UserChangeNotifier();
       },
       child: Builder(
         builder: (context) {
@@ -25,7 +25,7 @@ class UsersStatelessPage extends StatelessWidget {
               actions: [
                 IconButton(
                   onPressed: () {
-                    final model = context.read<ProviderDemo>();
+                    final model = context.read<UserChangeNotifier>();
                     model.fetchUsers();
                     print(model.users);
                   },
@@ -41,7 +41,7 @@ class UsersStatelessPage extends StatelessWidget {
   }
 
   Widget _body(BuildContext context) {
-    final model = context.watch<ProviderDemo>();
+    final model = context.watch<UserChangeNotifier>();
     final users = model.users;
 
     switch (model.homeState) {
@@ -50,7 +50,7 @@ class UsersStatelessPage extends StatelessWidget {
       case HomeState.error:
         return _emptyUserWidget(context);
       case HomeState.loaded:
-        return _userListView(context, users); 
+        return _userListView(context, users);
       case HomeState.initial:
         return _loadingWidget(context);
     }

@@ -5,9 +5,19 @@ import 'package:flutter/material.dart';
 
 class UserDetailsViewModel extends ChangeNotifier {
   /// Default Constructor
-  UserDetailsViewModel(this.userId) {
-    getUserDetails();
-    getUserPosts();
+  UserDetailsViewModel(this.userId);
+
+  Future<void> initialize() async {
+    // print(1);
+
+    // asyncTask.execute.then((value){
+    //   print(2);
+    // });
+
+    // Future.microtask(() => print(3));
+
+    await Future.wait([getUserDetails(), _getUserPosts()]);
+    notifyListeners();
   }
 
   /// Required to get started
@@ -28,20 +38,21 @@ class UserDetailsViewModel extends ChangeNotifier {
       _user = user;
     } catch (e) {
       errorMessage = 'Unable to fetch the user details';
-    } finally {
-      notifyListeners();
     }
   }
 
   /// Get User Posts
   Future<void> getUserPosts() async {
+    await _getUserPosts();
+    notifyListeners();
+  }
+
+  Future<void> _getUserPosts() async {
     try {
       final apiUsers = await ApiService().getUserPosts(userId);
       _posts = apiUsers;
     } catch (e) {
       errorMessage = 'Unable to fetch the user details';
-    } finally {
-      notifyListeners();
     }
   }
 }

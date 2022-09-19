@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:api_using_model/common/constants.dart';
 import 'package:api_using_model/models/user_post.dart';
-import 'package:api_using_model/models/users.dart';
 import 'package:api_using_model/models/users_post_details.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;

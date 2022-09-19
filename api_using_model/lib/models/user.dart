@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 import 'dart:convert';
 
 List<User> postFromJson(String str) {
@@ -8,8 +10,8 @@ List<User> postFromJson(String str) {
 String postToJson(List<User> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class User {
-  User({
+class User extends Equatable {
+  const User({
     this.id = 0,
     this.name = '',
     this.website,
@@ -36,4 +38,7 @@ class User {
       };
 
   bool get isEmpty => id == 0;
+
+  @override
+  List<Object?> get props => [id, name, website, email];
 }
