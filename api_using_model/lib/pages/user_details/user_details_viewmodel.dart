@@ -25,7 +25,7 @@ class UserDetailsViewModel extends ChangeNotifier {
 
   /// This will be refreshed multiple times
   User? _user;
-  User get user => _user ?? User();
+  User get user => _user ?? const User();
 
   List<UsersPost>? _posts;
   List<UsersPost> get posts => _posts ?? [];

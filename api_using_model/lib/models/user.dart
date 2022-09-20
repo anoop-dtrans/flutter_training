@@ -18,6 +18,8 @@ class User extends Equatable {
     this.email,
   });
 
+  static const empty = User();
+
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
         name: json["name"],
