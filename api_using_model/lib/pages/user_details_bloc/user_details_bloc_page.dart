@@ -19,7 +19,15 @@ class UserDetailsCubitPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => UserDetailsCubit(userId)..initialize(),
-      child: BlocBuilder<UserDetailsCubit, UserDetailsState>(
+      child: BlocConsumer<UserDetailsCubit, UserDetailsState>(
+        // listenWhen: (a, b) => a != b,
+        listener: (context, state) {
+          if (state.hasError) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+          }
+        },
+        // buildWhen: (a, b) => a != b,
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(

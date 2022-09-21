@@ -20,6 +20,8 @@ class UserDetailsState extends Equatable {
 
   final String? errorMessage;
 
+  bool get hasError => errorMessage?.isNotEmpty ?? false;
+
   /// Create a copy of state with provided params
   UserDetailsState copyWith(
       {int? userId,
