@@ -1,11 +1,11 @@
 import 'package:api_using_model/models/user.dart';
 import 'package:api_using_model/models/users_post_details.dart';
-import 'package:api_using_model/pages/user_details_bloc/bloc/user_details_bloc.dart';
+import 'package:api_using_model/pages/user_details_cubit/cubit/user_details_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UserDetailsBlocPage extends StatelessWidget {
-  const UserDetailsBlocPage({
+class UserDetailsCubitPage extends StatelessWidget {
+  const UserDetailsCubitPage({
     Key? key,
     required this.userId,
     this.user,
@@ -18,9 +18,8 @@ class UserDetailsBlocPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          UserDetailsBloc(userId)..add(FetchInitialDataEvent()),
-      child: BlocConsumer<UserDetailsBloc, UserDetailsState>(
+      create: (context) => UserDetailsCubit(userId)..initialize(),
+      child: BlocConsumer<UserDetailsCubit, UserDetailsState>(
         // listenWhen: (a, b) => a != b,
         listener: (context, state) {
           if (state.hasError) {
@@ -36,7 +35,7 @@ class UserDetailsBlocPage extends StatelessWidget {
               actions: [
                 IconButton(
                   onPressed: () {
-                    context.read<UserDetailsBloc>().add(FetchUserPostsEvent());
+                    context.read<UserDetailsCubit>().getUserPosts();
                   },
                   icon: const Icon(Icons.refresh),
                 )
@@ -55,7 +54,7 @@ class UserDetailsBlocPage extends StatelessWidget {
   }
 
   Widget _userDetailsWidget(BuildContext context) {
-    final user = context.read<UserDetailsBloc>().state.user;
+    final user = context.read<UserDetailsCubit>().state.user;
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -82,7 +81,7 @@ class UserDetailsBlocPage extends StatelessWidget {
   }
 
   Widget _userPostsWidget(BuildContext context) {
-    final usersPosts = context.read<UserDetailsBloc>().state.posts;
+    final usersPosts = context.read<UserDetailsCubit>().state.posts;
     return ListView.builder(
       itemCount: usersPosts.length,
       itemBuilder: (context, index) {
@@ -105,7 +104,7 @@ class UserPostListViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final usersPosts = context.read<UserDetailsBloc>().state.posts;
+    final usersPosts = context.read<UserDetailsCubit>().state.posts;
     return ListView.builder(
       itemCount: usersPosts.length,
       itemBuilder: (context, index) {

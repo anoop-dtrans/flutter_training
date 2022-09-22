@@ -1,11 +1,11 @@
 // ignore_for_file: avoid_print
 
 import 'package:api_using_model/models/user.dart';
-import 'package:api_using_model/pages/user_details/user_details_page.dart';
-import 'package:api_using_model/pages/user_details_bloc/user_details_bloc_page.dart';
 import 'package:api_using_model/provider/provider_demo.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'user_details_bloc/user_details_bloc_page.dart';
 
 class UsersStatelessPage extends StatelessWidget {
   const UsersStatelessPage({Key? key, required this.title}) : super(key: key);
@@ -80,7 +80,7 @@ class UsersStatelessPage extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => UserDetailsCubitPage(
+                  builder: (_) => UserDetailsBlocPage(
                     userId: user.id,
                     user: user,
                   ),
